@@ -1,0 +1,57 @@
+-- Tabela para a classe 'Category'
+CREATE TABLE category (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255)
+);
+
+-- Tabela para a classe 'User'
+CREATE TABLE "user" (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    display_name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Tabela para a classe 'Address'
+CREATE TABLE address (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT,
+    street VARCHAR(255),
+    complement VARCHAR(255),
+    zip_code VARCHAR(255),
+    city VARCHAR(255),
+    state VARCHAR(255),
+    country VARCHAR(255),
+    number VARCHAR(255),
+    is_default BOOLEAN,
+    FOREIGN KEY (user_id) REFERENCES "user"(id)
+);
+
+-- Tabela para a classe 'Order'
+CREATE TABLE "order" (
+    id BIGSERIAL PRIMARY KEY,
+    date_time TIMESTAMP,
+    user_id BIGINT,
+    status VARCHAR(255),
+    address_id BIGINT,
+    FOREIGN KEY (user_id) REFERENCES "user"(id),
+    FOREIGN KEY (address_id) REFERENCES address(id)
+);
+
+-- Tabela para a classe 'Product' (Necessária para ProductOrder)
+CREATE TABLE product (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255)
+    -- Você pode adicionar mais colunas aqui se a classe Product tiver outros atributos.
+);
+
+-- Tabela para a classe 'ProductOrder'
+CREATE TABLE product_order (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT,
+    product_id BIGINT,
+    quantity INTEGER,
+    price NUMERIC(10, 2),
+    FOREIGN KEY (order_id) REFERENCES "order"(id),
+    FOREIGN KEY (product_id) REFERENCES product(id)
+);
